@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased: SEO kit
+
+- `library/tools/seo.py` turns a finished episode into a publishing kit in `<episode>/seo/`: title, title options, description, tags, hashtags, pinned comment, social caption, VTT, thumbnail, `metadata.json`, `manifest.json` and a README.
+- Authored copy lives in `papercut/seo.json`; without it the tool falls back to the HOOK, the BRIEF and the script. `--dry-run` and `--json` make it safe to run in a pipeline.
+- The build skill runs it after the mp4; the QA checklist checks the limits and the VTT.
+
 ## 0.1.0: first public release
 
 What ships.

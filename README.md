@@ -30,7 +30,7 @@ You describe the video ("explain this repo in 25 seconds"). The skills research 
 | Overlays | taped headline banner, word-by-word torn caption tags, hook title, real-screenshot proof card with marker circles |
 | Kit | 188 exports in `library/papercut/kit`: paper primitives (`Paper`, `Slab`, `Disc`, `Pill`, `Card`), a base critter with accessories, prop sets, rough UI rebuilds, a comment-keyword CTA scene |
 | Sound | 79 synthesised SFX and 8 music beds, picked by name, rendered with Web Audio (no audio files to license) |
-| Tools | scaffold, cue sheets, cached renders, QA contact sheets, catalog generator, placeholder narration, optional local TTS setup |
+| Tools | scaffold, cue sheets, cached renders, QA contact sheets, catalog generator, SEO kit, placeholder narration, optional local TTS setup |
 
 Each camera move and cut, with its props and when to use it, is in [`library/papercut/CATALOG.md`](library/papercut/CATALOG.md) (sections `paper/camera.tsx` and `paper/transitions.tsx`).
 
@@ -205,6 +205,7 @@ npx remotion studio                            # scrub it
      │                 plan.json        scene boundaries on word onsets
      ▼
  papercut-build ─────► scenes, audio, mp4    scene agents in parallel, cached renders
+     │                 seo/                 title, description, tags, hashtags, VTT, thumbnail
      │
      ▼
  papercut-qa ────────► stills + checklist, then fixes
@@ -225,6 +226,8 @@ my-series/
     narration/script.json     [{"id": "l1_hook", "text": "..."}, ...]
     narration/voice/          takes, final lines, timing
     papercut/                 the Remotion project: episode.json, STORYBOARD.md, src/scenes, out/
+      seo.json                optional: authored SEO copy (title, description, tags, hashtags)
+    seo/                      generated: title, description, tags, hashtags, VTT, thumbnail
 ```
 
 ## Voice
@@ -246,6 +249,7 @@ Cloning a voice needs a reference clip you have the right to use.
 - **Sound.** A new effect is one file, `library/audio/sfx/<name>.js`, whose first line is `// @sfx name | tags | seconds | description | origin`. A new mood is one JSON file in `library/audio/beds/`.
 - **Fonts.** `library/papercut/kit/fonts.ts` loads local woff2 files, so renders never touch the network.
 - **Giving back.** After an episode, `python3 library/tools/harvest.py <project>` lists what to promote into the library (`library/HARVEST.md`); then regenerate the catalogs.
+- **SEO.** From `papercut/`, `python3 library/tools/seo.py` writes `<episode>/seo/` (title, description, tags, hashtags, VTT, thumbnail). Put authored copy in `papercut/seo.json`; without it the tool falls back to the HOOK, the BRIEF and the script.
 
 Projects keep a snapshot of the kit in `src/lib/`, so an old episode renders the same after the library changes. Re-sync with `library/papercut/sync_kit.sh <project>` when you want the new version.
 
