@@ -1,6 +1,6 @@
 ---
 name: papercut-build
-description: Build and render a papercut episode from a storyboard with the library. Scaffolds the project, builds scenes with parallel agents, assets and audio, renders the mp4, then harvests reusables. Use for "build the reel", "scaffold an episode", "rebuild scene 4", "render it".
+description: Build and render a papercut episode from a storyboard with the library. Scaffolds the project, builds scenes with parallel agents, assets and audio, renders the mp4, writes the SEO kit, then harvests reusables. Use for "build the reel", "scaffold an episode", "rebuild scene 4", "render it".
 ---
 
 # Papercut build
@@ -76,7 +76,20 @@ Flags: `--workers N` (default 3), `--conc N`, `--force`, `--keep`. Each scene is
 
 To fix or rebuild one scene: edit `src/scenes/<Scene>.tsx`, check it with `papercut-qa`, then run `render.sh` again.
 
-## 7. Harvest (after the episode)
+## 7. SEO kit
+
+From `papercut/`, after the mp4 exists:
+
+```
+python3 $PAPERCUT_LIB/tools/seo.py              # -> <episode>/seo/
+python3 $PAPERCUT_LIB/tools/seo.py --dry-run    # show the copy, write nothing
+```
+
+It writes `title.txt`, `title-options.txt`, `description.md`, `tags.txt`, `hashtags.txt`, `pinned-comment.txt`, `social-caption.md`, `subtitles.vtt`, `thumbnail.png`, `metadata.json`, `manifest.json` and `README.md`.
+
+Authored copy wins: put it in `papercut/seo.json` (`title`, `titleOptions`, `description`, `tags`, `hashtags`, `hashtagsByPlatform`, `keywords`, `cta`, `pinnedComment`, `social`, `freebie`, `sources`). Without it, the tool falls back to the HOOK, the BRIEF and the script. The `CTA:` line in `facts.md` supplies the keyword; `papercut/public/vo/captions.json` supplies the VTT; `ffprobe`/`ffmpeg` supply duration, resolution and the thumbnail.
+
+## 8. Harvest (after the episode)
 
 ```
 python3 $PAPERCUT_LIB/tools/harvest.py .       # from papercut/; read-only report

@@ -43,6 +43,7 @@ $PAPERCUT_LIB/tools/qa.sh NAME FROM-TO NTH [SCALE=0.3] [COLS=9]
 - [ ] Humour pass visible on screen: one format throughout, a costume prop per idea, one struggling beat, the frame-0 prop returns changed in the CTA set, and every gag reads in under 1 s and never covers the banner, the captions or the key number.
 - [ ] Vocabulary in the VO and banners matches the audience level in `SERIES.md`.
 - [ ] Voiceover, captions and events are in sync (scrub the Studio at every cut).
+- [ ] The SEO kit exists (`<episode>/seo/`), the title is ≤100 chars, tags are ≤500 chars, and `subtitles.vtt` matches the final cut.
 
 For a failed item, fix the scene file (or the kit in the library, never `src/lib/` in the project) and re-run the one scene. Rebuild a scene with `papercut-build`.
 

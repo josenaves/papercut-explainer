@@ -36,6 +36,7 @@ library/
     capture.mjs                screenshot a web page for the kit's RealShot component
     placeholder_vo.py          silent (or macOS `say`) narration, so a reel can be timed with no TTS
     selftest.sh                scaffold + build the bundled example (../examples/hello-reel), typecheck, render SFX and a still
+    seo.py                     SEO kit: title, description, tags, hashtags, VTT and thumbnail -> <episode>/seo/
     catalog.py  harvest.py     regenerate the two catalogs; list what an episode should give back to the library
     dialogue_timeline.py       two-speaker dialogue -> timeline.json + vo.wav (no template for it ships here)
   voice/                       optional local voiceover pipeline, see voice/README.md
@@ -81,7 +82,44 @@ Run these from the series folder unless noted.
 5. In `papercut/episode.json`, set `scenes` (cuts on words), `banners`, `bed`, `whipScene` and optionally `hook`. From `papercut/`, run `python3 $PAPERCUT_LIB/papercut/stubs.py`, then `python3 $PAPERCUT_LIB/tools/build_vo.py`. The second command flags any scene under 1.2 s.
 6. Build the first scene and `STORYBOARD.md` yourself. Give each scene agent `$PAPERCUT_LIB/papercut/AGENT_BRIEF.md` and its scene list. Each agent also writes its SFX rows to `tools/cue_sheet.d/<Scene>.json`.
 7. From `papercut/`: `python3 $PAPERCUT_LIB/tools/cues.py && node $PAPERCUT_LIB/audio/render.mjs`. Check scenes with `$PAPERCUT_LIB/tools/qa.sh NAME FROM-TO NTH`, then render with `$PAPERCUT_LIB/tools/render.sh`.
-8. From `papercut/`, `python3 $PAPERCUT_LIB/tools/harvest.py .` lists what the episode should give back. Promote it (`HARVEST.md`), then run `python3 $PAPERCUT_LIB/tools/catalog.py`.
+8. From `papercut/`: `python3 $PAPERCUT_LIB/tools/seo.py` writes `<episode>/seo/` with title, description, tags, hashtags, VTT and thumbnail. Authored copy goes in `papercut/seo.json`; without it the tool falls back to the BRIEF and the script.
+9. From `papercut/`, `python3 $PAPERCUT_LIB/tools/harvest.py .` lists what the episode should give back. Promote it (`HARVEST.md`), then run `python3 $PAPERCUT_LIB/tools/catalog.py`.
+
+## SEO kit
+
+`seo.py` turns the finished episode into a publishing kit, not just an mp4:
+
+```
+cd episodes/NN-slug/papercut
+python3 $PAPERCUT_LIB/tools/seo.py                 # -> ../seo/
+python3 $PAPERCUT_LIB/tools/seo.py --dry-run       # show the copy, write nothing
+python3 $PAPERCUT_LIB/tools/seo.py --json          # machine-readable summary
+```
+
+It writes `title.txt`, `title-options.txt`, `description.md`, `tags.txt`, `hashtags.txt`, `pinned-comment.txt`, `social-caption.md`, `subtitles.vtt`, `thumbnail.png`, `metadata.json`, `manifest.json` and `README.md`.
+
+Authored copy is a `papercut/seo.json` file:
+
+```json
+{
+  "title": "...",
+  "titleOptions": ["..."],
+  "description": "...",
+  "tags": ["..."],
+  "hashtags": ["#..."],
+  "hashtagsByPlatform": {"youtube": ["#..."], "instagram": ["#..."], "tiktok": ["#..."]},
+  "keywords": ["..."],
+  "cta": "Comenta MAPA que eu te mando a lista.",
+  "pinnedComment": "Comenta MAPA que eu te mando a lista.",
+  "social": "...",
+  "freebie": "freebie-mapa-brasil.md",
+  "sources": ["https://..."]
+}
+```
+
+Every field is optional. Without `seo.json`, the tool derives a title from the HOOK, a description from the BRIEF and the script, tags from frequent terms, hashtags from the tags, and a CTA from the BRIEF's `CTA:` line. Authored copy is always better; the fallback exists so an episode never ships without a kit.
+
+The tool uses `ffprobe` for duration and resolution and `ffmpeg` for the thumbnail. It reads `public/vo/captions.json` for the VTT. If the mp4 is missing, it still writes the copy from `plan.json` and warns.
 
 ## Token rules
 

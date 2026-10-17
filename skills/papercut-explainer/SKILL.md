@@ -50,6 +50,7 @@ Write the answers as the BRIEF block at the top of `episodes/NN-slug/research/fa
 | 5 | Scaffold and plan | `papercut-build` | `STORYBOARD.md` | the project, `episode.json` |
 | 6 | Voice and timing | `papercut-voice` | `script.json`, `voice/voice.json` | `narration/` takes, `public/vo/captions.json`, `src/plan.json` |
 | 7 | Scenes, sound, render | `papercut-build` | `plan.json`, `STORYBOARD.md` | `src/scenes/*`, `tools/cues.json`, `out/*.mp4` |
+| 7b | SEO kit | `papercut-build` (`tools/seo.py`) | `out/*.mp4`, `seo.json`, `public/vo/captions.json` | `../seo/` |
 | 8 | QA | `papercut-qa` | stills, `STORYBOARD.md` | fixes, the delivery summary |
 | 9 | After posting | `papercut-strategy` (autopsy), `papercut-build` (harvest) | platform numbers, the project | `research/analytics/`, library promotions |
 
@@ -68,7 +69,9 @@ The pipeline lives in files, not in chat. Each stage reads the files above and w
     narration/script.json    [{"id": "l1_hook", "text": "..."}, ...]
     papercut/
       episode.json           scenes, banners, hook, gaps, bed, cuts
+      seo.json               optional: authored SEO copy (title, description, tags, hashtags)
       STORYBOARD.md          HOOK, staging table, Camera/Cut table, scene blocks
+    seo/                     generated: title, description, tags, hashtags, VTT, thumbnail
 ```
 
 Library catalogs: `library/papercut/CATALOG.md` (every kit component) and `library/audio/CATALOG.md` (every SFX and bed). They are generated, so a fresh checkout may lack them or have stale ones. Run `python3 $PAPERCUT_LIB/tools/catalog.py` to rebuild. Agents read the catalogs, not the kit source.
