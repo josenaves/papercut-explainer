@@ -291,7 +291,7 @@ def main():
     ])
     title_options = [t if len(t) <= 100 else t[:97].rstrip() + "…" for t in title_options]
 
-    description = clean(authored.get("description", ""))
+    description = (authored.get("description") or "").strip()
     if not description:
         parts = [claim or hook]
         body = [l for l in lines[1:] if not re.search(r"\bcomenta\b", l, re.I)]
@@ -312,7 +312,7 @@ def main():
         description = description.rstrip() + "\n\n" + " ".join(missing)
 
     pinned = clean(authored.get("pinnedComment", "")) or cta
-    social = clean(authored.get("social", ""))
+    social = (authored.get("social") or "").strip()
     if not social:
         social = "\n\n".join(p for p in [hook or claim, cta, " ".join(hashtags)] if p)
 
